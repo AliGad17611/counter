@@ -1,10 +1,12 @@
+import 'package:counter/cubit/counter_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 class Button extends StatelessWidget {
-  final double width ;
-  final Color background ;
+  final double width;
+  final Color background;
   final String text;
   final int item;
-  final Function(int,int) onPressed;
 
   const Button({
     super.key,
@@ -12,9 +14,7 @@ class Button extends StatelessWidget {
     this.background = Colors.teal,
     required this.text,
     required this.item,
-    required this.onPressed
   });
-
 
   @override
   Widget build(BuildContext context) {
@@ -22,20 +22,27 @@ class Button extends StatelessWidget {
       width: width,
       child: ElevatedButton(
         onPressed: () {
-          if (item>=0){
-            int count = int.parse(text.replaceAll(RegExp(r'[^0-9]'), ''));
-            onPressed(item,count);
-          }else{
-            onPressed(item,0);
-          }
+          String numericString = text.replaceAll(RegExp(r'[^0-9]'), '');
+          int buttonValue =
+              numericString.isEmpty ? 0 : int.parse(numericString);
+          BlocProvider.of<CounterCubit>(context).increment(
+            team: item == 0
+                ? 'A'
+                : item == 1
+                    ? 'B'
+                    : 'reset',
+            button: buttonValue,
+          );
         },
         style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white,
-            backgroundColor: background,
-            shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            padding: const EdgeInsets.all(5)),
-        child:  Text(
+          foregroundColor: Colors.white,
+          backgroundColor: background,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          padding: const EdgeInsets.all(5),
+        ),
+        child: Text(
           text,
           style: const TextStyle(
             fontSize: 25,
@@ -45,8 +52,3 @@ class Button extends StatelessWidget {
     );
   }
 }
-
-
-
-
-

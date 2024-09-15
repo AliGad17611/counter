@@ -1,3 +1,5 @@
+import 'package:counter/cubit/counter_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'counter_task.dart';
 
@@ -10,9 +12,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: CounterScreen(),
+    return BlocProvider(
+      create: (context) => CounterCubit(),
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: CounterScreen(),
+      ),
     );
   }
 }
